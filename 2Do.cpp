@@ -12,7 +12,6 @@ public:
     int number;
 
 };
-
 std::vector<Task> vec;
 class editTaskOperator{
 public:
@@ -70,17 +69,50 @@ public:
 
     // }
 };
-
+class sorter{
+public:
+    std::vector<Task> sortedByTag(std::vector<Task> sourceVec,std::string sort_tag){
+        std::vector<Task> sortedTasksVec;
+        for (const auto& x : sourceVec) {
+            if (x.tag == sort_tag) {
+                sortedTasksVec.push_back(x);
+            }
+        }
+        return sortedTasksVec;
+    }
+};
 
 
 
 
 int main(){
     operations operat;
-    operat.inputTask();
-    std::cout<<vec[0].name<<std::endl;
-    operat.editTask();
+    //объявление тестовых тасков для дебага сортировки
+    std::vector<Task> test_vec;
+    std::vector<Task>  new_vec;
 
+    Task firstTask;
+    firstTask.tag="blue";
+    firstTask.name = "HelloTask";
+    test_vec.push_back(firstTask);
+    Task secondTask;
+    secondTask.tag="blue";
+    secondTask.name = "HelloTask2";
+    test_vec.push_back(secondTask);
+    Task thirdTask;
+    thirdTask.tag="red";
+    thirdTask.name = "HelloTask3";
+    test_vec.push_back(thirdTask);
+
+    sorter sort1;
+    new_vec = sort1.sortedByTag(test_vec,"red");
+
+    for(int i=0;i<new_vec.size();i++){
+        Task temp_task = new_vec[i];
+        std::cout<<"Task "<<i<<": "<<temp_task.name<<' '<<temp_task.tag<<"\n";
+    }
+
+    
     
     return 0;
 }
