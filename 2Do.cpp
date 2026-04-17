@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 class Task{
@@ -10,6 +11,7 @@ public:
     std::string color;
     int id;
     int number;
+    int priority;
 
 };
 std::vector<Task> vec;
@@ -49,21 +51,23 @@ public:
         int len = vec.size();
         createTask(len,name,"new","red");
     }
-    void editTask(){    //обращение к классу editTaskOperator и методам уже там
-        int id;
-        std::cout<<"    Режим редактирования:"<<"\n"<<"Введите номер заметки:"<<"\n";
-        std::cin>>id;
+    void editTask(int id){    //обращение к классу editTaskOperator и методам уже там
         std::cout<<"Выберите режим:"<<"\n"<<"1. Смена имени"<<"\n"<<"2. Смена цвета"<<"\n";
         int mode;
         std::cin>>mode;
         editTaskOperator editOperator;
         if(mode == 1){
-            std::cout<<"Текущее имя: "<<"\n"<<"Введите новое имя";
+            Task temp = vec[id];
+            std::cout<<"Текущее имя: "<<temp.name<<"\n"<<"Введите новое имя: ";
             std::string newName;
             std::cin>>newName;
             editOperator.editName(id,newName);
         }
         
+    }
+    Task getTaskFromID(int id){
+        Task tempTask = vec[id];//тут начинается нумерация с 0
+
     }
     // Task getTask(){
 
@@ -71,7 +75,7 @@ public:
 };
 class sorter{
 public:
-    std::vector<Task> sortedByTag(std::vector<Task> sourceVec,std::string sort_tag){
+    std::vector<Task> sortedOnlyTag(std::vector<Task> sourceVec,std::string sort_tag){
         std::vector<Task> sortedTasksVec;
         for (const auto& x : sourceVec) {
             if (x.tag == sort_tag) {
@@ -80,8 +84,75 @@ public:
         }
         return sortedTasksVec;
     }
+    std::vector<Task> sortedOnlyPriority(std::vector<Task> sourceVec,int priority_){
+        std::vector<Task> sortedTasksVec;
+        for (const auto& x : sourceVec) {
+            if (x.priority == priority_) {
+                sortedTasksVec.push_back(x);
+            }
+        }
+        return sortedTasksVec;
+    }
+    
 };
+class consoleManager{
+public:
+    void start(){
+        std::cout<<"----------------------"<<"\n";
+        std::cout<<"Добро пожаловать в заметки!"<<"\n";
+        std::cout<<"Выберите действие: \n 1.Новая заметка \n 2.Редактировать заметку \n 3.Вывод заметок \n";
+        std::cout<<"----------------------"<<"\n";
+        std::string mode;
+        std::cin>>mode;
+        int modeInt=0;
+        try{
+            modeInt = std::stoi(mode);
+        }
+        catch (...) {
+            if(mode=="q"||mode=="quit"||mode=="exit"||mode=="e"){
+                std::cout<<"\033[32mЗавершение работы\033[0m"<<'\n';
+                std::abort();
+            }
+            else{
+                std::cout<<"\033[31mНе распознанный ввод. Повторите попытку\033[0m\n";
+            }
+        }
+        if(modeInt==1){
 
+            operations oper;
+            int id;std::string name;std::string tag;std::string color;
+            std::cout<<"Введите имя: ";
+            std::cin>>name;
+            std::cout<<"Введите тег: ";
+            std::cin>>tag;
+            std::cout<<"Введите цвет: ";
+            std::cin>>color;
+            std::cout<<"\n";
+            id = vec.size()+1;
+            oper.createTask(id,name,tag,color);
+            
+        }
+        if(modeInt==2){
+            operations oper;
+            int id;
+            std::cout<<"Введите номер заметки для редактирования: ";
+            std::cin>>id;
+            try{
+                Task temp = vec[id-1];
+                oper.editTask(id-1);
+                
+            }
+            catch(...){std::cout << "Элемент не найден" << std::endl;}
+            
+
+        }
+        if(modeInt==3){
+            operations oper;
+            oper.printVectorSize();
+        }
+
+    }
+};
 
 
 
@@ -105,13 +176,22 @@ int main(){
     test_vec.push_back(thirdTask);
 
     sorter sort1;
-    new_vec = sort1.sortedByTag(test_vec,"red");
-
+    new_vec = sort1.sortedOnlyTag(test_vec,"red");
+    /*
     for(int i=0;i<new_vec.size();i++){
         Task temp_task = new_vec[i];
         std::cout<<"Task "<<i<<": "<<temp_task.name<<' '<<temp_task.tag<<"\n";
     }
 
+    std::cout<<"\033[32mЗавершение работы\033[0m"<<'\n';
+    */
+    consoleManager mngr;
+    while(1==1){
+            mngr.start();
+
+    
+
+    }
     
     
     return 0;
