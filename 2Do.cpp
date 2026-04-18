@@ -22,11 +22,15 @@ public:
         temp.name = new_name;
         vec[id]=temp;
     }
-    void editTag(){
-
+    void editTag(int id,std::string new_tag){
+        Task temp = vec[id];
+        temp.tag = new_tag;
+        vec[id]=temp;
     }
-    void editColor(){
-
+    void editColor(int id,std::string new_color){
+        Task temp = vec[id];
+        temp.color = new_color;
+        vec[id]=temp;
     }
 
 };
@@ -63,15 +67,28 @@ public:
             std::cin>>newName;
             editOperator.editName(id,newName);
         }
+        if(mode == 2){
+            Task temp = vec[id];
+            std::cout<<"Текущий тег: "<<temp.name<<"\n"<<"Введите новый тег: ";
+            std::string newName;
+            std::cin>>newName;
+            editOperator.editTag(id,newName);
+        }
         
     }
     Task getTaskFromID(int id){
         Task tempTask = vec[id];//тут начинается нумерация с 0
 
     }
-    // Task getTask(){
+    std::vector<Task> getAllTasks(){
+        std::vector<Task> tempVector;
+        for(int id = 0; id<vec.size(); id++){
+            Task temp=vec[id];
+            tempVector.push_back(temp);
 
-    // }
+        }
+        return tempVector;
+    }
 };
 class sorter{
 public:
@@ -138,17 +155,24 @@ public:
             std::cout<<"Введите номер заметки для редактирования: ";
             std::cin>>id;
             try{
+                if(vec.size()>id){
                 Task temp = vec[id-1];
                 oper.editTask(id-1);
-                
+                }
+                else{std::cout << "\033[31mЭлемент не найден\033[0m\n";}
             }
-            catch(...){std::cout << "Элемент не найден" << std::endl;}
+            catch(...){std::cout << "\033[31mЭлемент не найден\033[0m" << std::endl;}
             
 
         }
         if(modeInt==3){
             operations oper;
-            oper.printVectorSize();
+            // oper.printVectorSize();// заглушка
+            std::vector<Task> returnVector = oper.getAllTasks();
+            for(int id = 0;id<returnVector.size();id++){
+                Task currentTask = returnVector[id];
+                std::cout<<"Заметка "<<id+1<<". Имя: "<<currentTask.name<<" Тег: "<<currentTask.tag<<"\n";
+            }
         }
 
     }
@@ -157,6 +181,7 @@ public:
 
 
 int main(){
+    /* // ДЕБАГ
     operations operat;
     //объявление тестовых тасков для дебага сортировки
     std::vector<Task> test_vec;
@@ -177,7 +202,7 @@ int main(){
 
     sorter sort1;
     new_vec = sort1.sortedOnlyTag(test_vec,"red");
-    /*
+    
     for(int i=0;i<new_vec.size();i++){
         Task temp_task = new_vec[i];
         std::cout<<"Task "<<i<<": "<<temp_task.name<<' '<<temp_task.tag<<"\n";
