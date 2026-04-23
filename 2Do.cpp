@@ -40,6 +40,7 @@ public:
         Task newTask;
         newTask.id = id;
         newTask.name = name;
+        newTask.tag = tag;
         vec.push_back(newTask);
     }
     void deleteTask(int id){
@@ -152,10 +153,15 @@ public:
         if(modeInt==2){
             operations oper;
             int id;
+            std::vector temp___vec = oper.getAllTasks();
+            for(int i=0;i<temp___vec.size();i++){
+                Task cur_task = temp___vec[i];
+                std::cout<<i+1<<" "<<cur_task.name<<" "<<cur_task.tag<<"\n";
+            }
             std::cout<<"Введите номер заметки для редактирования: ";
             std::cin>>id;
             try{
-                if(vec.size()>id){
+                if(vec.size()>=id){
                 Task temp = vec[id-1];
                 oper.editTask(id-1);
                 }
