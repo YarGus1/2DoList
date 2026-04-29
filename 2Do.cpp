@@ -111,7 +111,17 @@ public:
         }
         return sortedTasksVec;
     }
+    std::vector<Task> sortedOnlyColor(std::vector<Task> sourceVec,std::string color_){
+        std::vector<Task> sortedTasksVec;
+        for (const auto& x : sourceVec) {
+            if (x.color == color_) {
+                sortedTasksVec.push_back(x);
+            }
+        }
+        return sortedTasksVec;
+    }
     
+
 };
 class consoleManager{
 public:
